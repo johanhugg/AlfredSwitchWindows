@@ -55,7 +55,7 @@ class BrowserTab : BrowserNamedEntity, Searchable, ProcessNameProtocol {
 
     var title : String {
         /* Safari uses 'name' as the tab title, while most of the browsers have 'title' there */
-        if self.rawItem.responds(to: Selector("name")) {
+        if self.rawItem.responds(to: #selector(getter: NSFetchedResultsSectionInfo.name)) {
             return performSelectorByName(name: "name", defaultValue: "")
         }
         return performSelectorByName(name: "title", defaultValue: "")
@@ -84,14 +84,14 @@ class BrowserTab : BrowserNamedEntity, Searchable, ProcessNameProtocol {
 
 class iTermTab : BrowserTab {
     override var title : String {
-        guard self.rawItem.responds(to: Selector("currentSession")),
+        guard self.rawItem.responds(to: Selector(("currentSession"))),
             let session: AnyObject = performSelectorByName(name: "currentSession", defaultValue: nil),
-            session.responds(to: Selector("name"))
+            session.responds(to: #selector(getter: NSFetchedResultsSectionInfo.name))
         else {
             return self.windowTitle
         }
 
-        let selectorResult = session.perform(Selector("name"))
+        let selectorResult = session.perform(#selector(getter: NSFetchedResultsSectionInfo.name))
         guard let retainedValue = selectorResult?.takeRetainedValue(),
             let tabName = retainedValue as? String
         else {
@@ -128,7 +128,7 @@ class BrowserWindow : BrowserNamedEntity {
 
     var title : String {
         /* Safari uses 'name' as the tab title, while most of the browsers have 'title' there */
-        if self.rawItem.responds(to: Selector("name")) {
+        if self.rawItem.responds(to: #selector(getter: NSFetchedResultsSectionInfo.name)) {
             return performSelectorByName(name: "name", defaultValue: "")
         }
         return performSelectorByName(name: "title", defaultValue: "")

@@ -73,7 +73,7 @@ class WindowInfoDict : Searchable, ProcessNameProtocol {
     var isProbablyMenubarItem : Bool {
         // Our best guess, if it's very small and attached to the top of the screen, it is probably something
         // related to the menubar
-        return self.bounds.minY <= 0 || self.bounds.height < 30
+        return self.bounds.height < 30
     }
     
     var isVisible : Bool {
@@ -113,7 +113,7 @@ struct Windows {
                 let wi = WindowInfoDict(rawDict: windowInfoRef)
                 
                 // We don't want to clutter our output with unnecessary windows that we can't switch to anyway.
-                guard wi.name.characters.count > 0 && !wi.isProbablyMenubarItem && wi.isVisible else {
+                guard wi.name.count > 0 && !wi.isProbablyMenubarItem && wi.isVisible else {
                     return []
                 }
                 
